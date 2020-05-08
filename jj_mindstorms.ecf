@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-4-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-4-0 http://www.eiffel.com/developers/xml/configuration-1-4-0.xsd" name="jj_mindstorms" uuid="EA28DC08-87BF-49AD-B060-2A5575CA3E41" library_target="jj_mindstorms">
+	<target name="jj_mindstorms">
+		<root all_classes="true"/>
+		<file_rule>
+			<exclude>/\.svn</exclude>
+		</file_rule>
+		<option warning="true" syntax_level="1">
+		</option>
+		<external_include location="$JJ_SOURCE\jj_mindstorms\includes"/>
+		<external_library location="$JJ_SOURCE\jj_mindstorms\libraries\NXT++.lib"/>
+		<external_library location="$JJ_SOURCE\jj_mindstorms\libraries\fantom.lib"/>
+		<library name="base" location="$ISE_LIBRARY\library\base\base-safe.ecf"/>
+		<cluster name="jj_mindstorms" location=".\" recursive="true">
+			<file_rule>
+				<exclude>/EIFGENs$</exclude>
+				<exclude>/.svn$</exclude>
+				<exclude>/CVS$</exclude>
+				<exclude>/tests$</exclude>
+			</file_rule>
+		</cluster>
+	</target>
+</system>
