@@ -29,7 +29,7 @@ feature {NONE} -- Implementation
 
 	c_set_sound (obj: POINTER; a_port: INTEGER)
 			-- Wrapper to tell the connection (the obj) that the
-			-- light sensor is connected to `a_port'
+			-- sound sensor is connected to `a_port'
 		require
 			object_exists: obj /= default_pointer
 		external

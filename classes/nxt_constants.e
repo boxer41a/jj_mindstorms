@@ -22,37 +22,6 @@ feature -- Basic operations
 
 feature -- Access
 
-	Default_nxt: NXT
-			-- A default NXT
-		once
-			create Result
-			Result.attach_motor (motor_a)
-			Result.attach_motor (motor_b)
-			Result.attach_motor (motor_c)
-			Result.attach_sensor (touch_sensor)
-			Result.attach_sensor (light_sensor)
-			Result.attach_sensor (sound_sensor)
-			Result.attach_sensor (distance_sensor)
-		end
-
-	motor_a: MOTOR
-			-- The motor connected to motor port A
-		once
-			create Result.make (port_a)
-		end
-
-	motor_b: MOTOR
-			-- The motor connected to motor port B
-		once
-			create Result.make (port_b)
-		end
-
-	motor_c: MOTOR
-			-- The motor connected to motor port C
-		once
-			create Result.make (port_c)
-		end
-
 	touch_sensor: TOUCH_SENSOR
 			-- The touch sensor; defaults to port 1
 		once

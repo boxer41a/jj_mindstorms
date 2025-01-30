@@ -1,23 +1,58 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-4-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-4-0 http://www.eiffel.com/developers/xml/configuration-1-4-0.xsd" name="jj_mindstorms" uuid="EA28DC08-87BF-49AD-B060-2A5575CA3E41" library_target="jj_mindstorms">
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-21-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-21-0 http://www.eiffel.com/developers/xml/configuration-1-21-0.xsd" name="jj_mindstorms" uuid="EA28DC08-87BF-49AD-B060-2A5575CA3E41"
+library_target="jj_mindstorms">
 	<target name="jj_mindstorms">
 		<root all_classes="true"/>
 		<file_rule>
+			<exclude>/CVS$</exclude>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/\.git</exclude>
 			<exclude>/\.svn</exclude>
+			<exclude>/tests$</exclude>
 		</file_rule>
-		<option warning="true" syntax_level="1">
+		<option warning="warning" full_class_checking="false" is_attached_by_default="true" is_obsolete_routine_type="true" manifest_array_type="mismatch_warning">
 		</option>
-		<external_include location="$JJ_SOURCE\jj_mindstorms\includes"/>
-		<external_library location="$JJ_SOURCE\jj_mindstorms\libraries\NXT++.lib"/>
-		<external_library location="$JJ_SOURCE\jj_mindstorms\libraries\fantom.lib"/>
-		<library name="base" location="$ISE_LIBRARY\library\base\base-safe.ecf"/>
-		<cluster name="jj_mindstorms" location=".\" recursive="true">
-			<file_rule>
-				<exclude>/EIFGENs$</exclude>
-				<exclude>/.svn$</exclude>
-				<exclude>/CVS$</exclude>
-				<exclude>/tests$</exclude>
-			</file_rule>
-		</cluster>
+		<setting name="total_order_on_reals" value="false"/>
+		<setting name="dead_code_removal" value="feature"/>
+		<capability>
+			<concurrency support="scoop" use="scoop"/>
+			<void_safety support="all" use="all"/>
+		</capability>
+
+		<external_include location="$(JJ_GITHUB)\jj_mindstorms\includes">
+			<condition>
+				<platform value="windows"/>
+			</condition>
+		</external_include>
+		<external_include location="$(JJ_GITHUB)/jj_mindstorms/includes">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_include>
+
+		<external_library location="$(JJ_GITHUB)\jj_mindstorms\libraries\NXT++.lib">
+			<condition>
+				<platform value="windows"/>
+			</condition>
+		</external_library>
+		<external_library location="$(JJ_GITHUB)/jj_mindstorms/libraries/NXT++.lib">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_library>
+
+		<external_library location="$(JJ_GITHUB)\jj_mindstorms\libraries\fantom.lib">
+			<condition>
+				<platform value="windows"/>
+			</condition>
+		</external_library>
+		<external_library location="$(JJ_GITHUB)/jj_mindstorms/libraries/fantom.lib">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_library>
+
+		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
+		<cluster name="jj_mindstorms" location=".\" recursive="true"/>
 	</target>
 </system>

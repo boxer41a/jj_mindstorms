@@ -21,16 +21,28 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_port: INTEGER)
-			-- Create a motor using the indicated port
+	make (a_nxt: NXT; a_port: INTEGER)
+			-- Create a motor using the indicated port and {NXT}
+		require
+			valid_port: is_valid_motor_port (a_port)
+			port_not_occupied: not nxt.is_motor_port_occupied (a_port)
 		do
-			port := a_port
+--			port := a_port
+--			nxt_imp := a_nxt
+			attach (a_nxt, a_port)
 		end
 
 feature -- Access
 
 	nxt: NXT
 			-- The nxt, if any, to which Current is attached
+		require
+			is_attached: is_attached
+		do
+			check attached nxt_imp as x then
+				Result := x
+			end
+		end
 
 	port: INTEGER
 			-- The port to which this motor is connected
@@ -64,9 +76,10 @@ feature -- Element change
 			if not a_nxt.is_motor_port_occupied (a_port) or else
 					(a_nxt.is_motor_port_occupied (a_port) and then
 					 a_nxt.motor (a_port) /= Current) then
-				a_nxt.attach_motor (Current)
+				port := a_port
+				nxt_imp := a_nxt
+				nxt.attach_motor (Current, port)
 			end
-			nxt := a_nxt
 		ensure
 			is_attached: is_attached
 			is_attached_to_nxt: a_nxt.has_motor (Current)
@@ -76,11 +89,11 @@ feature -- Element change
 	detach
 			-- Ensure the motor is not attached to any NXT
 		local
-			temp_nxt: NXT
+			temp_nxt: detachable NXT
 		do
 			if is_attached then
 				temp_nxt := nxt
-				temp_nxt := Void
+				nxt_imp := Void
 				temp_nxt.detach_motor (Current)
 			end
 		ensure
@@ -208,7 +221,8 @@ feature -- Status setting
 feature -- Basic operations
 
 	run
-			-- Make the motor run based on settings in `speed', `degrees', `reply'
+			-- Make the motor run based on settings in `speed',
+			-- `degrees', `reply'
 		require
 			is_attached: is_attached
 		do
@@ -223,7 +237,8 @@ feature -- Basic operations
 
 	stop
 			-- Make the motor come to a stop.
-			-- It will stop quickly if `is_braking'; it will coast to a stop otherwise.
+			-- It will stop quickly if `is_braking'; it will coast
+			-- to a stop otherwise.
 		require
 			is_attached: is_attached
 		do
@@ -260,8 +275,12 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
+	nxt_imp: detachable NXT
+			-- Detachable implementation of `nxt'
+
 	c_object: POINTER
-			-- Handle to the corresponding C++ object
+			-- Handle to the corresponding C++ object (i.e. the
+			-- {NXT} to which Current is attached)
 		require
 			is_attached: is_attached
 		do
@@ -357,7 +376,8 @@ feature {NONE} -- Implementation
 
 invariant
 
-	is_attached_implication: nxt.has_motor (Current)
+	is_attached_implication: is_attached implies nxt.index_of_motor (Current) = port
+
 	speed_large_enough: speed >= Minimum_speed
 	speed_small_enough: speed <= Maximum_speed
 

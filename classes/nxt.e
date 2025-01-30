@@ -31,13 +31,39 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
+	motor_a: MOTOR
+			-- The motor connected to motor port A
+		require
+			has_motor_on_port: is_motor_port_occupied (port_a)
+		do
+			Result := motor (port_a)
+		end
+
+	motor_b: MOTOR
+			-- The motor connected to motor port B
+		require
+			has_motor_on_port: is_motor_port_occupied (port_b)
+		do
+			Result := motor (port_b)
+		end
+
+	motor_c: MOTOR
+			-- The motor connected to motor port C
+		require
+			has_motor_on_port: is_motor_port_occupied (port_c)
+		do
+			Result := motor (port_c)
+		end
+
 	motor (a_port: INTEGER): MOTOR
 			-- The motor that is attached to `a_port'
 		require
 			is_valid_port: is_valid_motor_port (a_port)
 			is_port_occupied: is_motor_port_occupied (a_port)
 		do
-			Result := motors [a_port]
+			check attached motors [a_port] as m then
+				Result := m
+			end
 		end
 
 	sensor (a_port: INTEGER): SENSOR
@@ -46,7 +72,9 @@ feature -- Access
 			is_valid_port: is_valid_sensor_port (a_port)
 			is_port_occupied: is_sensor_port_occupied (a_port)
 		do
-			Result := sensors [a_port]
+			check attached sensors [a_port] as s then
+				Result := s
+			end
 		end
 
 feature -- Status report
@@ -56,14 +84,14 @@ feature -- Status report
 
 feature -- Element change
 
-	attach_motor (a_motor: MOTOR)
-			-- Attach `a_motor' to the NXT at the motor's `port' number
+	attach_motor (a_motor: MOTOR; a_port: INTEGER)
+			-- Attach `a_motor' to the NXT at `a_port' number
 		require
 			motor_exists: a_motor /= Void
-			valid_port: is_valid_motor_port (a_motor.port)
+			valid_port: is_valid_motor_port (a_port)
 		do
-			if motors [a_motor.port] /= a_motor then
-				clear_motor_port (a_motor.port)
+			if motors [a_port] /= a_motor then
+				clear_motor_port (a_port)
 				motors [a_motor.port] := a_motor
 				a_motor.attach (Current, a_motor.port)
 			end
@@ -91,16 +119,10 @@ feature -- Element change
 			-- Ensure the port is not connected to a motor
 		require
 			is_valid_motor_port: is_valid_motor_port (a_port)
-		local
-			m: MOTOR
 		do
-			if motors [a_port] /= Void then
-				m := motors [a_port]
+			if attached motors [a_port] as m then
 				motors [a_port] := Void
 				m.detach
-			end
-			check
-				motor_detached: not m.is_attached
 			end
 		ensure
 			port_is_empty: motors [a_port] = Void
@@ -141,16 +163,10 @@ feature -- Element change
 			-- Ensure the port is not connected to a sensor
 		require
 			is_valid_sensor_port: is_valid_sensor_port (a_port)
-		local
-			s: SENSOR
 		do
-			if sensors [a_port] /= Void then
-				s := sensors [a_port]
+			if attached sensors [a_port] as s then
 				sensors [a_port] := Void
 				s.detach
-			end
-			check
-				sensor_detached: not s.is_attached
 			end
 		ensure
 			port_is_empty: sensors [a_port] = Void
@@ -163,19 +179,19 @@ feature -- Basic operations
 		do
 			is_connected := c_openBT (c_object)
 			if is_connected then
-					-- create the c connection to the sensors
-					-- This is different form the motors
-				if sensors [port_1] /= Void then
-					sensors [port_1].set_sensor
+					-- Create the C connection to the sensors
+					-- This is different from the motors
+				if attached sensors [port_1] as s then
+					s.set_sensor
 				end
-				if sensors [port_2] /= Void then
-					sensors [port_2].set_sensor
+				if attached sensors [port_2] as s then
+					s.set_sensor
 				end
-				if sensors [port_3] /= Void then
-					sensors [port_3].set_sensor
+				if attached sensors [port_3] as s then
+					s.set_sensor
 				end
-				if sensors [port_4] /= Void then
-					sensors [port_4].set_sensor
+				if attached sensors [port_4] as s then
+					s.set_sensor
 				end
 			end
 		end
@@ -260,12 +276,12 @@ feature -- Querry
 
 feature {NONE} -- Implementation
 
-	motors: ARRAY [MOTOR]
+	motors: ARRAY [detachable MOTOR]
 			-- Array that can contain up to three motors
 			-- The index indicates the port number on which
 			-- the motor is attached to the NXT
 
-	sensors: ARRAY [SENSOR]
+	sensors: ARRAY [detachable SENSOR]
 			-- Array that can contain up to three sensors
 			-- The index indicates the port number on which
 			-- the sensor is attached to the NXT

@@ -30,6 +30,13 @@ feature -- Access
 
 	nxt: NXT
 			-- The nxt, if any, to which Current is attached
+		require
+			is_attached: is_attached
+		do
+			check attached nxt_imp as x then
+				Result := x
+			end
+		end
 
 	port: INTEGER
 			-- The port to which this sensor is connected
@@ -47,7 +54,8 @@ feature -- Status report
 
 	is_active: BOOLEAN
 			-- Is the sensor in active mode?
-			-- For a sonar sensor this would say the sonar is continuously emitting pulses
+			-- For a sonar sensor this would say the sonar is
+			-- continuously emitting pulses
 
 	is_attached: BOOLEAN
 			-- Is Current attached to an NXT?
@@ -91,9 +99,10 @@ feature -- Element change
 			if not a_nxt.is_sensor_port_occupied (a_port) or else
 					(a_nxt.is_sensor_port_occupied (a_port) and then
 					 a_nxt.sensor (a_port) /= Current) then
-				a_nxt.attach_sensor (Current)
+				port := a_port
+				nxt_imp := a_nxt
+				nxt.attach_sensor (Current)
 			end
-			nxt := a_nxt
 			if is_connected then
 				set_sensor
 			end
@@ -104,13 +113,13 @@ feature -- Element change
 		end
 
 	detach
-			-- Ensure the motor is not attached to any NXT
+			-- Ensure the sensor is not attached to any NXT
 		local
 			temp_nxt: NXT
 		do
 			if is_attached then
 				temp_nxt := nxt
-				temp_nxt := Void
+				nxt_imp := Void
 				temp_nxt.detach_sensor (Current)
 			end
 		ensure
@@ -128,6 +137,9 @@ feature {NXT} -- Implementation
 		end
 
 feature {NONE}
+
+	nxt_imp: detachable NXT
+			-- Detachable implementation of `nxt'
 
 	c_object: POINTER
 			-- Handle to the nxt's C++ object

@@ -13,8 +13,8 @@
 // 05/16/2007   phyizal     Removed fantom function call 
 
 // jjj  I added the defines...
-#ifndef ___nxt_pp_h___
-#define ___nxt_pp_h___
+//#ifndef ___nxt_pp_h___
+//#define ___nxt_pp_h___
 
 #ifndef ___comm_h___
    #include "comm.h"
@@ -299,7 +299,7 @@ namespace NXT
 		void NxtCamFlush(Comm::NXTComm* comm, int port);
 		void NxtCamCmd(Comm::NXTComm* comm, int port, ViUInt8 command[], int tx_length);
 		void NxtCamInit(Comm::NXTComm* comm, int port);
-		std::vector<std::vector<int>> GetNxtCamObjects(Comm::NXTComm* comm, int port, int minArea);
+		std::vector<std::vector<int> > GetNxtCamObjects(Comm::NXTComm* comm, int port, int minArea);
 		int GetNxtCamNumObjects(Comm::NXTComm* comm, int port);
 	};
 }

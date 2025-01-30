@@ -24,48 +24,10 @@ feature -- Initialization
 	make
 			-- Run application.
 		do
-			test_with_defaults
+			test
 		end
 
 feature
-
-	test_with_defaults
-		local
-			i, c: INTEGER
-			s: INTEGER
-		do
-			print ("MINDSTORMS_TESTER.test_with_defaults %N")
-			default_nxt.connect_bluetooth
-			if default_nxt.is_connected then
-				print ("NXT connected %N")
-				motor_a.set_speed (75)
-				from i := 1
-				until i > 6
-				loop
-					if touch_sensor.is_pressed then
-						motor_a.run
-					else
-						if motor_a.is_running then
-							c := c + 1
-							if c \\ 2 = 0 then
-								motor_a.set_reversed
-							else
-								motor_a.set_forward
-							end
-						end
-						motor_a.stop
-					end
-					s := sound_sensor.value
-					if s > 10 then
-						print ("sound = " + s.out + "%N")
-						print ("distance = " + distance_sensor.value.out + "%N")
-					end
-				end
-			else
-				print ("Unable to connect to NXT %N")
-			end
-			print ("MINDSTORMS_TESTER.test_with_defaults -- end %N")
-		end
 
 	test
 			--
@@ -76,12 +38,9 @@ feature
 		do
 			print ("MINDSTORMS_TESTER.test %N")
 			create my_nxt
-			create m1.make (port_a)
-			create m2.make (port_b)
-			create m3.make (port_c)
-			my_nxt.attach_motor (m1)
-			my_nxt.attach_motor (m2)
-			my_nxt.attach_motor (m3)
+			create m1.make (my_nxt, port_a)
+			create m2.make (my_nxt, port_b)
+			create m3.make (my_nxt, port_c)
 
 			create ts.make (port_1)
 			create ls.make (port_2)

@@ -3,7 +3,7 @@
    \brief This file contains platform-related defines.
 */
 /*
-   © Copyright 2005,
+   ï¿½ Copyright 2005,
    National Instruments Corporation.
    All rights reserved.
 
@@ -46,14 +46,15 @@
       
       #define nFANTOM100_kBigEndian         1
       #define nFANTOM100_kLittleEndian      0
-   #elif ( defined( __i386__ ))
+//   #elif ( defined( __i386__ ))
+    #else
       #undef   nFANTOM100_kProcessorI386
       #define  nFANTOM100_kProcessorI386    1
       
       #define nFANTOM100_kBigEndian         0
       #define nFANTOM100_kLittleEndian      1
-   #else
-      #error Unknown processor.
+//   #else
+//      #error Unknown processor.
    #endif
    
    #ifdef   nFANTOM100_kExportSymbols
@@ -63,8 +64,9 @@
    #endif
    
    
-#elif ( defined( _MSC_VER ) && ( defined( _M_IX86 ) || defined( _M_I86 )))
-   
+//#elif ( defined( _MSC_VER ) && ( defined( _M_IX86 ) || defined( _M_I86 )))
+#else
+
    #undef   nFANTOM100_kOSWin32
    #define  nFANTOM100_kOSWin32          1
    
@@ -83,9 +85,9 @@
    #define nFANTOM100_kBigEndian         0
    #define nFANTOM100_kLittleEndian      1
 
-#else
+//#else
    
-   #error Unknown platform.
+//   #error Unknown platform.
    
 #endif
 
