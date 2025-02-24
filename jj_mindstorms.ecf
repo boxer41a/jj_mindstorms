@@ -51,7 +51,18 @@ library_target="jj_mindstorms">
 				<platform excluded_value="windows"/>
 			</condition>
 		</external_library>
-
+<!--
+		<external_library location="$(JJ_GITHUB)\jj_mindstorms\libraries\fantom.dll">
+			<condition>
+				<platform value="windows"/>
+			</condition>
+		</external_library>
+		<external_library location="$(JJ_GITHUB)/jj_mindstorms/libraries/fantom.dll">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_library>
+-->
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
 		<cluster name="jj_mindstorms" location=".\" recursive="true"/>
 	</target>
